@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaApi.Data;
 using CinemaApi.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CinemaApi.Controllers
 {
@@ -12,45 +14,43 @@ namespace CinemaApi.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private List<Movie> movies = new List<Movie>
+        private CinemaDbContext _dbContext;
+
+        public MoviesController(CinemaDbContext dbContext)
         {
-            new Movie()
-            {
-                Id = 0,
-                Name = "Mission Impossible 7",
-                Language = "English"
-            },
+            _dbContext = dbContext;
+        }
 
-            new Movie()
-            {
-                Id = 1,
-                Name = "Fast",
-                Language = "English"
-            }
-        };
-
+        // GET: api/<MoviesController>
         [HttpGet]
-        public IEnumerable<Movie> Get ()
+        public IEnumerable<Movie> Get()
         {
-            return movies;
+            return _dbContext.Movies;
         }
 
+        // GET api/<MoviesController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/<MoviesController>
         [HttpPost]
-        public void Post ([FromBody] Movie movie)
+        public void Post([FromBody] string value)
         {
-            movies.Add(movie);
         }
 
+        // PUT api/<MoviesController>/5
         [HttpPut("{id}")]
-        public void Put (int id, [FromBody] Movie movie)
+        public void Put(int id, [FromBody] string value)
         {
-            movies[id] = movie;
         }
 
+        // DELETE api/<MoviesController>/5
         [HttpDelete("{id}")]
-        public void Delete (int id)
+        public void Delete(int id)
         {
-            movies.RemoveAt(id);
         }
     }
 }
